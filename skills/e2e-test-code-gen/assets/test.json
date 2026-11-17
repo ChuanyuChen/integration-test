@@ -1,0 +1,30 @@
+[
+  {
+    "id": 1,
+    "scenario": "Typical: generate registry-center pytest code from the reviewed CSV",
+    "prompt": "/e2e-test-code-gen\n\nReviewed CSV: outputs/registry-center-agentcard-fit-cases.csv\nTarget repo: openan/registry-center",
+    "expected": "Parses the fixed 16-column English header (BOM tolerant); rows whose Notes key language_profile=python go to e2e/<feature>/test_<feature>_<scenario>.py; docstring first line contains the case ID without brackets; generates tests/README.md and waits for confirmation; validates with uv run pytest --collect-only",
+    "must_not": ["reference the 12-column legacy header", "ask for the SIG name", "hardcode secrets", "modify the source code under test"]
+  },
+  {
+    "id": 2,
+    "scenario": "Mixed profile: interop cases are placed in java per the Notes language_profile key",
+    "prompt": "Generate code from the reviewed CSV for FIT-registry-center-task-dispatch-001 only",
+    "expected": "Notes key language_profile=java → JUnit5 + WireMock, placed in src/test/java (language forced by Maven exception); @DisplayName contains FIT-registry-center-task-dispatch-001; Component Deps column=orchestration-center is reflected in the README topology section",
+    "must_not": ["generate all CSV rows", "generate this case in python", "invent A2A-T messages"]
+  },
+  {
+    "id": 3,
+    "scenario": "Failure: non-16-column CSV",
+    "prompt": "Generate e2e code from a 12-column legacy-format CSV",
+    "expected": "STOP; prompt that an openan fixed 16-column English-header reviewed CSV is required",
+    "must_not": ["force-parse anyway", "skip the header validation"]
+  },
+  {
+    "id": 4,
+    "scenario": "Failure: orchestration input missing",
+    "prompt": "/e2e-test-code-gen\n\nThe CSV is in outputs/, generate the code for me",
+    "expected": "STOP; list the missing orchestration inputs one by one (target repo / startup method / env variable contract, etc.), and create no files",
+    "must_not": ["fabricate URLs or ports", "skip the README and generate code directly"]
+  }
+]
