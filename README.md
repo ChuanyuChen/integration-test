@@ -2,6 +2,8 @@
 
 The OpenAN integration-test repository serves as the central hub for end-to-end integration testing, housing test plans, execution cases, evaluation reports, and domain-specific testing skills. The governing baseline is the OpenAN Integration Testing Process and Framework (see `docs/OpenAN Integration Testing Process and Framework.md`).
 
+> New here? Start with the **[OpenAN Test Guide — Getting Started](docs/getting-started.md)** to walk through the test workflow step by step.
+
 ## Directory Structure
 
 ```
