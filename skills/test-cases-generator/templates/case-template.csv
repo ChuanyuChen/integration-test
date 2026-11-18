@@ -1,0 +1,13 @@
+﻿Milestone,Case Name,Case ID,Module,Component Deps,Requirement Link,Case Type,Priority,Precondition,Steps,Expected Result,Automatable,Automated Test,Dev Owner,Test Owner,Notes
+26-winter,Register AgentCard and query it,[FIT-registry-center-agentcard-001],registry-center,n/a,https://github.com/project-openan/registry-center/issues/1,Functional Test,P0,"1. registry-center is deployed via docker compose and has passed the health check
+2. A valid AgentCard payload has been prepared","1. POST /rest/v1/registry-center/agent-cards to submit the AgentCard see result 1
+2. GET /rest/v1/registry-center/agent-cards/{org}/{name} to query that AgentCard see result 2
+3. Cleanup: delete the AgentCard registered in this case","1. Registration succeeds and returns 201
+2. The query returns fields consistent with the submitted content
+3. A subsequent query returns 404 and the test data has been cleaned up",Yes,,<Dev Owner>,<Test Owner>,design_method:Scenario Method;environment:docker-compose;language_profile:python;protocol_primitive:none;execution_strategy:smoke
+26-winter,Service self-heals after registry-center container stop,[DFX-registry-center-reliability-001],registry-center,n/a,https://github.com/project-openan/registry-center/issues/9,Stability Test,P1,"1. registry-center is deployed with at least 1 Agent registered
+2. A docker compose environment is available","1. Record the current list of registered Agents
+2. docker compose stop registry-center to stop the service
+3. docker compose start registry-center to recover the service see result 1
+4. Cleanup: delete the test-registered Agent data","1. After the service recovers, the original Agent is still retrievable with no data loss; the process is automatically brought up without manual intervention
+2. After cleanup, the query returns 404",Yes,,<Dev Owner>,<Test Owner>,dfx_type:DFR;environment:docker-compose;language_profile:python;protocol_primitive:none;execution_strategy:full

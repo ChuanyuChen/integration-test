@@ -1,0 +1,36 @@
+$ uv run pytest tests/integration/test_agent_register.py -q
+FF.                                                                    [100%]
+================================= FAILURES =================================
+________________________ test_register_agent_success ________________________
+
+client = <httpx.AsyncClient object at 0x0000021A8B1F5C90>
+
+    @pytest.mark.integration
+    @pytest.mark.asyncio
+    async def test_register_agent_success(client):
+        """FIT-registry-center-agentcard-001: register a valid Agent successfully"""
+        resp = await client.post("/v1/agents", json={"name": "fault-mgmt-agent"})
+>       assert resp.status_code == 201
+E       assert 500 == 201
+E        +  where 500 = <Response [500 Internal Server Error]>.status_code
+
+tests/integration/test_agent_register.py:12: AssertionError
+____________________ test_register_agent_duplicate ________________________
+
+client = <httpx.AsyncClient object at 0x0000021A8B1F5E10>
+
+    @pytest.mark.integration
+    @pytest.mark.asyncio
+    async def test_register_agent_duplicate(client):
+        """FIT-registry-center-agentcard-002: duplicate agent name registration returns conflict"""
+        await client.post("/v1/agents", json={"name": "dup-agent"})
+        resp = await client.post("/v1/agents", json={"name": "dup-agent"})
+>       assert resp.status_code == 409
+E       assert 500 == 409
+E        +  where 500 = <Response [500 Internal Server Error]>.status_code
+
+tests/integration/test_agent_register.py:19: AssertionError
+========================= short test summary info ==========================
+FAILED tests/integration/test_agent_register.py::test_register_agent_success
+FAILED tests/integration/test_agent_register.py::test_agent_register_duplicate - assert 500 == 409
+1 passed, 2 failed in 1.24s
